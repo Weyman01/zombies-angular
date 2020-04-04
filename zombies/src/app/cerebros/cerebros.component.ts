@@ -9,7 +9,6 @@ import { AppComponent } from '../app.component';
   styleUrls: ['./cerebros.component.css']
 })
 export class CerebrosComponent implements OnInit {
-
   // tslint:disable: no-inferrable-types
 
   private static _id: string = '';
@@ -59,6 +58,8 @@ export class CerebrosComponent implements OnInit {
   static set trigger(value: boolean) {
     CerebrosComponent._trigger = value;
   }
+  
+  username: string;
 
   /*title = 'zombies';
   name = 'E1000io';

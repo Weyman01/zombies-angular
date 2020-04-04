@@ -16,25 +16,50 @@ export class DataService {
   constructor(private _client: HttpClient) { }
 
 async obtenerZombies() {
-  let zombies = await this._client.get(apiUrl + 'zombies');
-  return this.updateZombies$.next(zombies);
+    let nombreP = localStorage.getItem('username');
+    let zombies = await this._client.get(apiUrl + 'zombies/' + nombreP );
+    return this.updateZombies$.next(zombies);
 }
 
 async obtenerCerebros() {
-  let cerebros = await this._client.get<any>(apiUrl + 'cerebros');
+  let nombreP = localStorage.getItem('username');
+  let cerebros = await this._client.get<any>(apiUrl + 'cerebros/' + nombreP);
   return this.updateCerebros$.next(cerebros);
 }
+
 
 async obtenerUsuario() {
   let usuarios = await this._client.get<any>(apiUrl + 'users');
   return usuarios;
 }
 
-agregarZombie(nombre: string, correo: string, tipo: string) {
+async obtenerRol(username: string ) {
+  let rol = await this._client.get<any>(apiUrl + 'users' + username);
+  return rol;
+}
+
+async contarCh(url: string) {
+  return this._client.get(url);
+}
+async contarV(url: string) {
+  return this._client.get(url);
+}
+async contarF(url: string) {
+  return this._client.get(url);
+}
+async contarCU(url: string, username:string) {
+  return this._client.get(url + username);
+}
+async contarCRes(url: string) {
+  return this._client.get(url);
+}
+
+agregarZombie(nombre: string, correo: string, tipo: string, usern: string) {
   let nuevoZombie = {
     name: nombre,
     email: correo,
-    type: tipo
+    type: tipo,
+    user: usern
   };
   return this._client.post(apiUrl + 'zombies/new', nuevoZombie);
 }
@@ -54,12 +79,13 @@ actualizarZombie(id: string, nombre: string, correo: string, tipo: string) {
   return this._client.put(apiUrl + 'zombies/edit/' + _id, zombieModificado);
 }
 
-agregarCerebro(sabor: string, descripcion: string, Iq: number, foto: string) {
+agregarCerebro(sabor: string, descripcion: string, Iq: number, foto: string, usern: string) {
   let nuevoCerebro = {
     flavor: sabor,
     description: descripcion,
     iq: Iq,
-    picture: foto
+    picture: foto,
+    user: usern
   };
   return this._client.post(apiUrl + 'cerebros/new', nuevoCerebro);
 }
@@ -80,11 +106,12 @@ actualizarCerebro(id: string, sabor: string, descripcion: string, Iq: number, fo
   return this._client.put(apiUrl + 'cerebros/edit/' + _id, cerebroModificado);
 }
 
-agregarUsuario(_username: string, _password: string, _email: string) {
+agregarUsuario(_username: string, _email: string, _password: string, _type: string) {
   let nuevoUsuario = {
       username: _username,
       password: _password,
-      email: _email
+      email: _email,
+      type: _type
   };
   return this._client.post(apiUrl + 'users/new', nuevoUsuario);
 }

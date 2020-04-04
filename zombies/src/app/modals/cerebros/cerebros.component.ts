@@ -18,6 +18,7 @@ export class CerebrosModalsComponent implements OnInit {
   iq: number;
   foto: string;
   trigger: boolean;
+  username: string;
 
   constructor(private dataService: DataService, private _renderer: Renderer2) { }
 
@@ -39,8 +40,9 @@ export class CerebrosModalsComponent implements OnInit {
   guardarCerebro() {
     var element = document.getElementById("mensajeAlertaGuardarCerebros");
     element.innerHTML = "";
+    this.username = localStorage.getItem('username');
     console.log(this.sabor, this.descripcion, this.iq, this.foto);
-    this.dataService.agregarCerebro(this.sabor, this.descripcion, this.iq, this.foto)
+    this.dataService.agregarCerebro(this.sabor, this.descripcion, this.iq, this.foto, this.username)
       .subscribe((resultado) => {
       console.log(resultado);
       this._renderer.selectRootElement(this.modal.nativeElement, true).click();

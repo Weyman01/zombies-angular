@@ -11,6 +11,7 @@ export class RegisterComponent implements OnInit {
   username: string;
   password: string;
   email: string;
+  type: string;
   constructor(private dataService: DataService, private router: Router) { }
 
   ngOnInit(): void {
@@ -19,13 +20,14 @@ export class RegisterComponent implements OnInit {
   guardarUsuario() {
     var element = document.getElementById("mensajeAlertaGuardarUsuarios");
     element.innerHTML = "";
-    console.log(this.username, this.password, this.email);
-    this.dataService.agregarUsuario(this.username, this.password, this.email)
+    console.log(this.username, this.password, this.email,this.type);
+    this.dataService.agregarUsuario(this.username, this.email, this.password, this.type)
       .subscribe((resultado) => {
       console.log(resultado);
       this.username = "";
       this.password = "";
       this.email = "";
+      this.type="";
       this.redirect();
     }, (error) => {
       console.log( error );

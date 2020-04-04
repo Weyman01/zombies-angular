@@ -16,11 +16,18 @@ export class HeaderComponent implements OnInit {
     
   }
    private _username = "";
+   private _type ="";
   public get username() {
     return this._username;
   }
   public set username(value) {
     this._username = value;
+  }
+  public get type() {
+    return this._type;
+  }
+  public set type(value) {
+    this._type = value;
   }
 
   private _foto = "";

@@ -15,14 +15,16 @@ import { TitleComponent } from './shared/title/title.component';
 import { SettingsComponent } from './shared/settings/settings.component';
 import { appRouting } from './app.routes';
 import { ZombiesComponent } from './zombies/zombies.component';
-import { ZombiesModalsComponent } from './modals/zombies/zombies.component';
+import { ZombiesModalsComponent } from './modals/zombies/zombiesmodals.component';
 import { CerebrosModalsComponent } from './modals/cerebros/cerebros.component';
 import { CerebrosComponent } from './cerebros/cerebros.component';
 import { SettingsService } from './services/settings.service';
 import { HttpClientModule } from '@angular/common/http';
 import { UsuariosComponent } from './modals/usuarios/usuarios.component';
 import { RegisterComponent } from './register/register.component';
-
+import { SaborComponent } from './graficos/sabor/sabor.component';
+import { ChartsModule } from 'ng2-charts';
+import { CerebrosUsuarioComponent } from './graficos/cerebros-usuario/cerebros-usuario.component';
 
 @NgModule({
   declarations: [
@@ -41,14 +43,16 @@ import { RegisterComponent } from './register/register.component';
     CerebrosComponent,
     CerebrosModalsComponent,
     UsuariosComponent,
-    RegisterComponent
-  ],
+    RegisterComponent,
+    SaborComponent,
+    CerebrosUsuarioComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     appRouting,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ChartsModule
   ],
   providers: [SettingsService, ZombiesComponent],
   bootstrap: [AppComponent]

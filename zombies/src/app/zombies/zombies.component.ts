@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../services/data.service';
-import { ZombiesModalsComponent } from 'src/app/modals/zombies/zombies.component';
+import { ZombiesModalsComponent } from 'src/app/modals/zombies/zombiesmodals.component';
 import { Router } from '@angular/router';
 import { AppComponent } from '../app.component';
 
@@ -47,7 +47,6 @@ export class ZombiesComponent implements OnInit {
   static set trigger(value: boolean) {
     ZombiesComponent._trigger = value;
   }
-  
 /*
   title = 'zombies';
   name = 'E1000io';
@@ -90,11 +89,10 @@ export class ZombiesComponent implements OnInit {
   }
 
 
-  guardarId(_id: string){
+  guardarId( _id: string) {
     ZombiesComponent.id = _id;
-    console.log(ZombiesComponent.id)
+    console.log(ZombiesComponent.id);
   }
-  
   guardarDatos(id: string, name: string, email: string, type: string) {
     console.log(id, name, email, type);
     ZombiesComponent.id =  id;
@@ -108,6 +106,7 @@ export class ZombiesComponent implements OnInit {
   constructor(private _dataService: DataService, private router: Router) { }
 
   actualizarTabla() {
+    let usern = localStorage.getItem('username');
     this._dataService.zombiesObservable
     .subscribe((resultados) => {
       this.zombies = resultados;
@@ -121,9 +120,9 @@ export class ZombiesComponent implements OnInit {
 }
 
   ngOnInit(): void {
-    console.log("Actualizar tabla...");
+    console.log('Actualizar tabla...');
     this.actualizarTabla();
-    if(AppComponent.logged === false){
+    if (AppComponent.logged === false) {
       this.redirect();
     }
   }

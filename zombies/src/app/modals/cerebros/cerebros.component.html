@@ -10,14 +10,18 @@
             <div class="modal-body">
                 <div id="mensajeAlertaGuardarCerebros"></div>
                 <section class="card-body"><h5 class="card-title">Datos del cerebro</h5>
-                    <div class="position-relative form-group"><label for="Flavor" class="">Sabor</label><input [(ngModel)]="sabor" type="text" name="sabor" id="sabor" placeholder="Ej: Pistache" class="form-control form-control-sm"></div>
+                    <div class="position-relative form-group"><label for="Flavor" class="">Sabor</label><select [(ngModel)]="sabor" name="select" id="sabor" class="form-control form-control-sm">
+                        <option disabled="true" selected >- Seleccione un sabor -</option>
+                        <option>Chocolate</option>
+                        <option>Vainilla</option>
+                        <option>Fresa</option>
+                    </select></div>
                     <div class="position-relative form-group"><label for="Description" class="">Descripcion</label><input [(ngModel)]="descripcion" type="text" name="descripcion" id="descripcion" placeholder="Ej: Con sabor a pistache" class="form-control form-control-sm"></div>
                     <div class="position-relative form-group"><label for="IQ" class="">IQ</label><input [(ngModel)]="iq" type="number" name="iq" id="iq" placeholder="Ej: 80" class="form-control form-control-sm"></div>
                     <div class="position-relative form-group"><label for="Picture" class="">Foto</label><input [(ngModel)]="foto" type="text" name="foto" id="foto" placeholder="Ej: foto.jpg" class="form-control form-control-sm"></div>
                 </section>      
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <button type="button" data-dismiss='alert' class="mt-1 btn btn-primary" (click)="guardarCerebro()">Guardar cambios</button>
             </div>
         </div>
@@ -57,7 +61,12 @@
             <div class="modal-body">
                 <div id="mensajeAlertaActualizarCerebros"></div>
                 <section class="card-body"><h5 class="card-title">Datos del cerebro</h5>
-                    <div class="position-relative form-group"><label for="Flavor" class="">Sabor</label><input [(ngModel)]="sabor" type="text" name="sabor" id="saborActualizar" placeholder="Ej: Pistache" class="form-control form-control-sm"></div>
+                    <div class="position-relative form-group"><label for="Flavor" class="">Sabor</label><select [(ngModel)]="sabor" name="select" id="saborActualizar" class="form-control form-control-sm">
+                        <option disabled="true" selected >- Seleccione -</option>
+                        <option>Chocolate</option>
+                        <option>Vainilla</option>
+                        <option>Fresa</option>
+                    </select></div>
                     <div class="position-relative form-group"><label for="Description" class="">Descripcion</label><input [(ngModel)]="descripcion" type="text" name="descripcion" id="descripcionActualizar" placeholder="Ej: Con sabor a pistache" class="form-control form-control-sm"></div>
                     <div class="position-relative form-group"><label for="IQ" class="">IQ</label><input [(ngModel)]="iq" type="number" name="iq" id="iq" placeholder="Ej: 80" class="form-control form-control-sm"></div>
                     <div class="position-relative form-group"><label for="Picture" class="">Foto</label><input [(ngModel)]="foto" type="text" name="foto" id="fotoActualizar" placeholder="Ej: foto.jpg" class="form-control form-control-sm"></div>

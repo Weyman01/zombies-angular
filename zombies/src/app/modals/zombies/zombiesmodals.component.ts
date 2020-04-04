@@ -1,106 +1,116 @@
-import { Component, OnInit, ElementRef, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { DataService } from 'src/app/services/data.service';
 import { ZombiesComponent } from 'src/app/zombies/zombies.component';
 
 @Component({
-    selector: 'modal-zombies',
-    templateUrl: './zombiesmodals.component.html',
-    styles: [],
-    encapsulation: ViewEncapsulation.None
+  selector: 'modal-zombies',
+  templateUrl: './zombies.component.html',
 })
 export class ZombiesModalsComponent implements OnInit {
-    @ViewChild('modalZG') public modalZG: ElementRef;
-    @ViewChild('modalZA') public modalZA: ElementRef;
-    @ViewChild('error') public error2: ElementRef;
+  @ViewChild('modal') public modal: ElementRef;
+  @ViewChild('modalEliminar') public modalEliminar: ElementRef;
+  @ViewChild('modalActualizar') public modalActualizar: ElementRef;
+  id: string;
+  nombre: string;
+  correo: string;
+  tipo: string;
+  trigger: boolean;
+  username: string;
+  constructor(private dataService: DataService, private _renderer: Renderer2) { }
 
-    nombre: string;
-    email: string;
-    tipo: string;
-    ID: string;
+  ngOnInit(): void {
+  }
 
-    nombreE: string;
-    emailE: string;
-    tipoE: string;
-    IDE: string;
-
-    zombies: any;
-    error: string;
-    trigger: string;
-
-    constructor(private dataService: DataService, private _renderer: Renderer2) { }
-
-    ngOnInit(): void {
+  ngAfterContentChecked(): void {
+    this.trigger = ZombiesComponent.trigger;
+    if (this.trigger === true) {
+      this.id = ZombiesComponent.id;
+      this.nombre = ZombiesComponent.nombre;
+      this.correo = ZombiesComponent.correo;
+      this.tipo = ZombiesComponent.tipo;
+      ZombiesComponent.trigger = false;
     }
+  }
 
-    ngAfterContentChecked(): void {
-        this.trigger = String(ZombiesComponent.trigger);
-        console.log(this.trigger);
-        if (this.trigger === "1") {
-            this.IDE = ZombiesComponent.id.replace(/["]+/g, '');
-            this.nombreE = ZombiesComponent.nombre.replace(/["]+/g, '');
-            this.emailE = ZombiesComponent.correo.replace(/["]+/g, '');
-            this.tipoE = ZombiesComponent.tipo.replace(/["]+/g, '');
-            ZombiesComponent.trigger = 0;
-        }
-      }
-
-    actualizarTabla() {
-      this.dataService.zombiesObservable
-      .subscribe((resultadoZ) => {
-        this.zombies = resultadoZ;
-      });
-
+  guardarZombie() {
+    let element = document.getElementById('mensajeAlertaGuardar');
+    element.innerHTML = '';
+    this.username = localStorage.getItem('username');
+    console.log(this.nombre, this.correo, this.tipo, this.username);
+    this.dataService.agregarZombie(this.nombre, this.correo, this.tipo, this.username)
+      .subscribe((resultado) => {
+      console.log(resultado);
+      this._renderer.selectRootElement(this.modal.nativeElement, true).click();
       this.dataService.obtenerZombies();
-    }
-
-    guardarZombie() {
-        let alZ = document.getElementById('alertaGuardar');
-        alZ.innerHTML = '';
-        console.log(this.nombre, this.email, this.tipo);
-        this.dataService.agregarZombie(this.nombre, this.email, this.tipo)
-        .subscribe((resultado) => {
-            console.log(resultado);
-            this._renderer.selectRootElement(this.modalZG.nativeElement, true).click();
-            this.dataService.obtenerZombies();
-            this.ID = '';
-            this.nombre = '';
-            this.email = '';
-            this.tipo = '';
-        }, (error) => {
-            console.log(error);
-            alZ.innerHTML = alZ.innerHTML + "<div class='alert alert-danger alert-dismissible fade show' role='alert'>"+
-                "<strong>" + error.error.mensajeError +"</strong>" +
-                "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
-                    "<span aria-hidden='true'>&times;</span>"+
-                "</button>"+
-                "</div>";
+      this.nombre = '';
+      this.correo = '';
+      this.tipo = '';
+      localStorage.removeItem('_id');
+    }, (error) => {
+      console.log( error );
+      if (error.error.mensajeError !== 0) {
+        (error.error.mensajeError).forEach(function(mensajeError) {
+          element.innerHTML = element.innerHTML + "<div class='alert alert-danger alert-dismissible fade show' role='alert'>" +
+          '<strong>' + mensajeError.mensaje + '</strong>' +
+          "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>" +
+            "<span aria-hidden='true'>&times;</span>" +
+          '</button>' +
+        '</div>';
         });
-        this.actualizarTabla();
-    }
+      }
+    });
+  }
 
-    actualizarZombie() {
-        let alZ = document.getElementById('alertaActualizar');
-        alZ.innerHTML = '';
-        console.log(this.IDE, this.nombreE, this.emailE, this.tipoE);
-        this.dataService.actualizarZombie(this.IDE, this.nombreE, this.emailE, this.tipoE)
-        .subscribe((resultado) => {
-            console.log(resultado);
-            this._renderer.selectRootElement(this.modalZA.nativeElement, true).click();
-            this.dataService.obtenerZombies();
-            this.IDE = '';
-            this.nombreE = '';
-            this.emailE = '';
-            this.tipoE = '';
-        }, (error) => {
-            console.log(error);
-            alZ.innerHTML = alZ.innerHTML + "<div class='alert alert-danger alert-dismissible fade show' role='alert'>"+
-                "<strong>" + error.error.mensajeError +"</strong>" +
-                "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
-                    "<span aria-hidden='true'>&times;</span>"+
-                "</button>"+
-                "</div>";
+  borrarZombie() {
+    let element = document.getElementById('mensajeAlertaBorrar');
+    this.username = localStorage.getItem('username');
+    element.innerHTML = '';
+    this.id = ZombiesComponent.id;
+    console.log(this.id);
+    this.dataService.eliminarZombie(this.id)
+      .subscribe((resultado) => {
+      console.log(resultado);
+      this._renderer.selectRootElement(this.modalEliminar.nativeElement, true).click();
+      this.dataService.obtenerZombies();
+      localStorage.removeItem('_id');
+    }, (error) => {
+      console.log( error );
+      if (error.error.mensajeError !== 0) {
+        (error.error.mensajeError).forEach( function (mensajeError) {
+          element.innerHTML = element.innerHTML + "<div class='alert alert-danger alert-dismissible fade show' role='alert'>" +
+          '<strong>' + mensajeError.mensaje + '</strong>' +
+          "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>" +
+            "<span aria-hidden='true'>&times;</span>" +
+          '</button>' +
+        '</div>';
         });
-        this.actualizarTabla();
-    }
+      }
+    });
+  }
+
+  actualizarZombie() {
+    console.log(this.id, this.nombre, this.correo, this.tipo);
+    this.username = localStorage.getItem('username');
+    let element = document.getElementById('mensajeAlertaActualizar');
+    element.innerHTML = '';
+    this.dataService.actualizarZombie(this.id, this.nombre, this.correo, this.tipo)
+      .subscribe((resultado) => {
+      console.log(resultado);
+      this._renderer.selectRootElement(this.modalActualizar.nativeElement, true).click();
+      this.dataService.obtenerZombies();
+    }, (error) => {
+      console.log( error );
+      if (error.error.mensajeError !== 0) {
+        (error.error.mensajeError).forEach(function(mensajeError) {
+          element.innerHTML = element.innerHTML + "<div class='alert alert-danger alert-dismissible fade show' role='alert'>" +
+          '<strong>' + mensajeError.mensaje + '</strong>' +
+          "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>" +
+            "<span aria-hidden='true'>&times;</span>" +
+          '</button>' +
+        '</div>';
+        });
+      }
+    });
+  }
 
 }

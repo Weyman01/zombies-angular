@@ -13,7 +13,8 @@ export class LoginComponent implements OnInit {
   username: string;
   password: string;
   email: string;
-
+  type: string;
+  //aD: string;
   constructor(private dataService: DataService, private _renderer: Renderer2, private router: Router) { }
 
   ngOnInit(): void {
@@ -25,17 +26,19 @@ export class LoginComponent implements OnInit {
   login() {
     var element = document.getElementById("mensajeAlertaUsuarios");
     element.innerHTML = "";
-    console.log(this.username, this.password);
     this.dataService.iniciarSesion(this.username, this.password)
       .subscribe((resultado) => {
       console.log(resultado);
-      let usuario = this.dataService.obtenerUsuario();
-      console.log(usuario);
+      /*let usuario = this.dataService.obtenerUsuario();
+      console.log(usuario);*/
+      let admin = this.dataService.obtenerRol(this.username);
+      console.log(admin);
       localStorage.setItem('username', this.username);
       AppComponent.user = this.username;
       this.username = "";
       this.password = ""; 
       localStorage.setItem('logged', 'true');
+      //localStorage.setItem('admin', aD);
       AppComponent.logged = true;
       console.log(AppComponent.logged);
       this.redirect();
